@@ -22,10 +22,10 @@ BALL_SIZE = 20
 BALL_SPEED_X = 5
 BALL_SPEED_Y = 5
 
-player_paddle = pygame.Rect(50, HEIGHT//2 - PADDLE_HEIGHT//2, PADDLE_WIDTH, PADDLE_HEIGHT)
-opponent_paddle = pygame.Rect(WIDTH - 50 - PADDLE_WIDTH, HEIGHT//2 - PADDLE_HEIGHT//2, PADDLE_WIDTH, PADDLE_HEIGHT)
+player_paddle = pygame.Rect(50, HEIGHT // 2 - PADDLE_HEIGHT // 2, PADDLE_WIDTH, PADDLE_HEIGHT)
+opponent_paddle = pygame.Rect(WIDTH - 50 - PADDLE_WIDTH, HEIGHT // 2 - PADDLE_HEIGHT // 2, PADDLE_WIDTH, PADDLE_HEIGHT)
 
-ball = pygame.Rect(WIDTH//2 - BALL_SIZE//2, HEIGHT//2 - BALL_SIZE//2, BALL_SIZE, BALL_SIZE)
+ball = pygame.Rect(WIDTH // 2 - BALL_SIZE // 2, HEIGHT // 2 - BALL_SIZE // 2, BALL_SIZE, BALL_SIZE)
 ball_speed_x = BALL_SPEED_X * random.choice((1, -1))
 ball_speed_y = BALL_SPEED_Y * random.choice((1, -1))
 
@@ -39,11 +39,13 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_w] and player_paddle.top > 0:
-        player_paddle.y -= PADDLE_SPEED
-    if keys[pygame.K_s] and player_paddle.bottom < HEIGHT:
-        player_paddle.y += PADDLE_SPEED
+    mouse_y = pygame.mouse.get_pos()[1]
+
+    player_paddle.y = mouse_y - PADDLE_HEIGHT // 2
+    if player_paddle.top < 0:
+        player_paddle.top = 0
+    if player_paddle.bottom > HEIGHT:
+        player_paddle.bottom = HEIGHT
 
     if ball.y < opponent_paddle.y + opponent_paddle.height // 2:
         opponent_paddle.y -= PADDLE_SPEED
@@ -61,13 +63,13 @@ while running:
 
     if ball.left <= 0:
         opponent_score += 1
-        ball.center = (WIDTH//2, HEIGHT//2)
+        ball.center = (WIDTH // 2, HEIGHT // 2)
         ball_speed_x *= random.choice((1, -1))
         ball_speed_y *= random.choice((1, -1))
         PADDLE_SPEED = 7
     if ball.right >= WIDTH:
         player_score += 1
-        ball.center = (WIDTH//2, HEIGHT//2)
+        ball.center = (WIDTH // 2, HEIGHT // 2)
         ball_speed_x *= random.choice((1, -1))
         ball_speed_y *= random.choice((1, -1))
     PADDLE_SPEED += 1
@@ -80,8 +82,8 @@ while running:
 
     player_text = font.render(str(player_score), True, WHITE)
     opponent_text = font.render(str(opponent_score), True, WHITE)
-    SCREEN.blit(player_text, (WIDTH//4, 50))
-    SCREEN.blit(opponent_text, (WIDTH*3//4, 50))
+    SCREEN.blit(player_text, (WIDTH // 4, 50))
+    SCREEN.blit(opponent_text, (WIDTH * 3 // 4, 50))
 
     pygame.display.flip()
 
