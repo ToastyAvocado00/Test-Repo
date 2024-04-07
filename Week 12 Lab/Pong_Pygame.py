@@ -47,10 +47,11 @@ while running:
     if player_paddle.bottom > HEIGHT:
         player_paddle.bottom = HEIGHT
 
-    if ball.y < opponent_paddle.y + opponent_paddle.height // 2:
+    if ball_speed_x > 0:
+        if opponent_paddle.centery < ball.centery:
+            opponent_paddle.y += PADDLE_SPEED
+    elif opponent_paddle.centery > ball.centery:
         opponent_paddle.y -= PADDLE_SPEED
-    if ball.y > opponent_paddle.y + opponent_paddle.height // 2:
-        opponent_paddle.y += PADDLE_SPEED
 
     ball.x += ball_speed_x
     ball.y += ball_speed_y
