@@ -64,11 +64,13 @@ while running:
         ball.center = (WIDTH//2, HEIGHT//2)
         ball_speed_x *= random.choice((1, -1))
         ball_speed_y *= random.choice((1, -1))
+        PADDLE_SPEED = 7
     if ball.right >= WIDTH:
         player_score += 1
         ball.center = (WIDTH//2, HEIGHT//2)
         ball_speed_x *= random.choice((1, -1))
         ball_speed_y *= random.choice((1, -1))
+    PADDLE_SPEED += 1
 
     SCREEN.fill(BLACK)
 
