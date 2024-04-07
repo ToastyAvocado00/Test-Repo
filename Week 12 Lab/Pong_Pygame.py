@@ -82,6 +82,7 @@ while running:
     SCREEN.blit(opponent_text, (WIDTH*3//4, 50))
 
 
+
     pygame.time.Clock().tick(60)
 
 pygame.quit()
