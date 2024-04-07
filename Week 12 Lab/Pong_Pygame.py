@@ -14,6 +14,10 @@ RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
 YELLOW = (255, 255, 0)
+PURPLE = (148, 0, 211)  # Violet
+ORANGE = (255, 165, 0)
+PINK = (255, 192, 203)
+CYAN = (0, 255, 255)
 
 PADDLE_WIDTH = 10
 PADDLE_HEIGHT = 100
@@ -33,6 +37,11 @@ ball_speed_y = BALL_SPEED_Y * random.choice((1, -1))
 player_score = 0
 opponent_score = 0
 font = pygame.font.Font(None, 36)
+
+background_colors = [BLACK, BLUE, GREEN, YELLOW, PURPLE, ORANGE, PINK, CYAN]
+current_color_index = 0
+color_change_interval = 500
+frame_count = 0
 
 running = True
 while running:
@@ -76,7 +85,12 @@ while running:
         ball_speed_y *= random.choice((1, -1))
     PADDLE_SPEED += 1
 
-    SCREEN.fill(BLACK)
+    frame_count += 1
+    if frame_count >= color_change_interval:
+        frame_count = 0
+        current_color_index = (current_color_index + 1) % len(background_colors)
+
+    SCREEN.fill(background_colors[current_color_index])
 
     pygame.draw.rect(SCREEN, WHITE, player_paddle)
     pygame.draw.rect(SCREEN, WHITE, opponent_paddle)
