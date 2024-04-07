@@ -1,3 +1,4 @@
+import colorsys
 import pygame
 import random
 
@@ -84,6 +85,10 @@ while running:
         ball_speed_y *= random.choice((1, -1))
     PADDLE_SPEED += 1
 
+    hue = (frame_count % 360) / 360.0
+    ball_color = colorsys.hsv_to_rgb(hue, 1, 1)
+    ball_color = (int(ball_color[0] * 255), int(ball_color[1] * 255), int(ball_color[2] * 255))
+
     frame_count += 1
     if frame_count >= color_change_interval:
         frame_count = 0
@@ -93,7 +98,7 @@ while running:
 
     pygame.draw.rect(SCREEN, WHITE, player_paddle)
     pygame.draw.rect(SCREEN, WHITE, opponent_paddle)
-    pygame.draw.ellipse(SCREEN, RED, ball)
+    pygame.draw.ellipse(SCREEN, ball_color, ball)
 
     player_text = font.render(str(player_score), True, WHITE)
     opponent_text = font.render(str(opponent_score), True, WHITE)
