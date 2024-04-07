@@ -3,6 +3,7 @@ import random
 
 pygame.init()
 
+HEIGHT: int
 WIDTH, HEIGHT = 800, 600
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Customized Pong")
@@ -47,12 +48,11 @@ while running:
     if player_paddle.bottom > HEIGHT:
         player_paddle.bottom = HEIGHT
 
-        if ball_speed_x > 0:
-
-            if opponent_paddle.centery < ball.centery:
-                opponent_paddle.y += PADDLE_SPEED
-            elif opponent_paddle.centery > ball.centery:
-                opponent_paddle.y -= PADDLE_SPEED
+    opponent_paddle.y = ball.y - PADDLE_HEIGHT // 2
+    if opponent_paddle.top < 0:
+        opponent_paddle.top = 0
+    if opponent_paddle.bottom > HEIGHT:
+        opponent_paddle.bottom = HEIGHT
 
     ball.x += ball_speed_x
     ball.y += ball_speed_y
