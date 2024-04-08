@@ -145,6 +145,13 @@ while running:
     SCREEN.blit(player_text, (WIDTH // 4, 50))
     SCREEN.blit(opponent_text, (WIDTH * 3 // 4, 50))
 
+    if game_over:
+        winner_text = font.render("Player 1 Wins!" if player_score >= winning_score else "Player 2 Wins!", True, WHITE)
+        SCREEN.blit(winner_text, (WIDTH // 2 - 120, HEIGHT // 2 - 50))
+        pygame.display.flip()
+        pygame.time.delay(2000)
+        break
+
     pygame.display.flip()
 
     pygame.time.Clock().tick(60)
