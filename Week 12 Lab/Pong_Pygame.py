@@ -21,7 +21,7 @@ CYAN = (0, 255, 255)
 
 PADDLE_WIDTH = 10
 PADDLE_HEIGHT = 100
-PADDLE_SPEED = 5
+PADDLE_SPEED = 2.5
 
 BALL_SIZE = 20
 BALL_SPEED_X = 5
@@ -64,11 +64,16 @@ while running:
     if player_paddle.bottom > HEIGHT:
         player_paddle.bottom = HEIGHT
 
-    opponent_paddle.y = ball.y - PADDLE_HEIGHT // 2
-    if opponent_paddle.top < 0:
-        opponent_paddle.top = 0
-    if opponent_paddle.bottom > HEIGHT:
-        opponent_paddle.bottom = HEIGHT
+    if ball_speed_x > 0:
+        if ball.centery < opponent_paddle.centery:
+            opponent_paddle.y -= PADDLE_SPEED
+        elif ball.centery > opponent_paddle.centery:
+            opponent_paddle.y += PADDLE_SPEED
+    else:
+        if opponent_paddle.centery < HEIGHT // 2:
+            opponent_paddle.y += PADDLE_SPEED
+        elif opponent_paddle.centery > HEIGHT // 2:
+            opponent_paddle.y -= PADDLE_SPEED
 
     ball.x += ball_speed_x
     ball.y += ball_speed_y
@@ -109,6 +114,11 @@ while running:
         ball_speed_x *= random.choice((1, -1))
         ball_speed_y *= random.choice((1, -1))
     PADDLE_SPEED += 1
+
+    if opponent_paddle.centery < ball.centery:
+        opponent_paddle.y += PADDLE_SPEED
+    elif opponent_paddle.centery > ball.centery:
+        opponent_paddle.y -= PADDLE_SPEED
 
     for index, (b, sx, sy) in enumerate(multi_balls):
         b.x += sx
