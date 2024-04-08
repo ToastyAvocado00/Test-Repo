@@ -43,6 +43,13 @@ current_color_index = 0
 color_change_interval = 500
 frame_count = 0
 
+winning_score = 5
+game_over = False
+
+multi_balls = []
+multi_ball_active = False
+multi_ball_countdown = 0
+
 running = True
 while running:
     for event in pygame.event.get():
@@ -66,6 +73,24 @@ while running:
     ball.x += ball_speed_x
     ball.y += ball_speed_y
 
+    if multi_ball_active:
+        multi_ball_countdown -= 1
+        if multi_ball_countdown <= 0:
+            multi_ball_active = False
+    else:
+        if random.random() < 0.01:
+            multi_ball_active = True
+            multi_ball_countdown = 200
+            for _ in range(2):
+                new_ball = pygame.Rect(ball)
+                new_ball_speed_x = random.choice((1, -1)) * random.randint(2, 5)
+                new_ball_speed_y = random.choice((1, -1)) * random.randint(2, 5)
+                multi_balls.append((new_ball, new_ball_speed_x, new_ball_speed_y))
+
+    for index, (b, sx, sy) in enumerate(multi_balls):
+        b.x += sx
+        b.y += sy
+
     if ball.top <= 0 or ball.bottom >= HEIGHT:
         ball_speed_y *= -1
 
@@ -85,6 +110,18 @@ while running:
         ball_speed_y *= random.choice((1, -1))
     PADDLE_SPEED += 1
 
+    for index, (b, sx, sy) in enumerate(multi_balls):
+        b.x += sx
+        b.y += sy
+
+        if b.top <= 0 or b.bottom >= HEIGHT:
+            multi_balls[index] = (b, sx, -sy)
+        if b.colliderect(player_paddle) or b.colliderect(opponent_paddle):
+            multi_balls[index] = (b, -sx, sy)
+
+        if b.left <= 0 or b.right >= WIDTH:
+            multi_balls.pop(index)
+
     hue = (frame_count % 360) / 360.0
     ball_color = colorsys.hsv_to_rgb(hue, 1, 1)
     ball_color = (int(ball_color[0] * 255), int(ball_color[1] * 255), int(ball_color[2] * 255))
@@ -99,6 +136,9 @@ while running:
     pygame.draw.rect(SCREEN, WHITE, player_paddle)
     pygame.draw.rect(SCREEN, WHITE, opponent_paddle)
     pygame.draw.ellipse(SCREEN, ball_color, ball)
+
+    for b, _, _ in multi_balls:
+        pygame.draw.ellipse(SCREEN, ball_color, b)
 
     player_text = font.render(str(player_score), True, WHITE)
     opponent_text = font.render(str(opponent_score), True, WHITE)
